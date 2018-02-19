@@ -43,19 +43,19 @@ spec:
         - name: http
           containerPort: 8080
 
-        livenessProbe:
-          httpGet:
-            path: /rest/applinks/latest/manifest
-            port: 8080
-          initialDelaySeconds: 180
-          timeoutSeconds: 15
+        # livenessProbe:
+        #   httpGet:
+        #     path: /rest/applinks/latest/manifest
+        #     port: 8080
+        #   initialDelaySeconds: 180
+        #   timeoutSeconds: 15
 
-        readinessProbe:
-          httpGet:
-            path: /rest/applinks/latest/manifest
-            port: 8080
-          initialDelaySeconds: 180
-          timeoutSeconds: 15
+        # readinessProbe:
+        #   httpGet:
+        #     path: /rest/applinks/latest/manifest
+        #     port: 8080
+        #   initialDelaySeconds: 180
+        #   timeoutSeconds: 15
 
         volumeMounts:
 
