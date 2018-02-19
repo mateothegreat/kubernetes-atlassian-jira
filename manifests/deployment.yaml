@@ -54,21 +54,15 @@ spec:
           httpGet:
             path: /rest/applinks/latest/manifest
             port: 8080
-          initialDelaySeconds: 15
-          timeoutSeconds: 1
+          initialDelaySeconds: 180
+          timeoutSeconds: 15
 
         volumeMounts:
-
-          - mountPath: /var/www/html
-            name: empty
 
           - mountPath: /var/atlassian/application-data/confluence
             name: atlassian-jira-persistent-storage
       
       volumes:
-
-        - name: empty
-          emptyDir: {}
 
         - name: atlassian-jira-persistent-storage
           persistentVolumeClaim:
