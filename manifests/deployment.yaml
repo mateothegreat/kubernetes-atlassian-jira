@@ -1,0 +1,76 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: atlassian-jira
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: atlassian-jira
+        app: atlassian-jira
+    
+    spec:
+
+      # initContainers:
+      # - name: mysql-driver
+      #   image: busybox
+      #   command: ["wget -qO- https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.45.tar.gz | tar xvz mysql-connector-java-5.1.45/mysql-connector-java-5.1.45-bin.jar && mv mysql-connector-java-5.1.45/mysql-connector-java-5.1.45-bin.jar /opt/atlassian/confluence/WEB-INF/lib"]
+      
+      containers:
+        
+      - name: atlassian-jira
+        image: cptactionhank/atlassian-jira:latest
+        imagePullPolicy: Always
+        env:
+
+        - name: JVM_MINIMUM_MEMORY
+          value: "1024m"
+        - name: JVM_MAXIMUM_MEMORY
+          value: "1024m"
+        - name: CATALINA_OPTS
+          value: "-Xms1024m -Xmx1024m"
+        - name: X_PROXY_NAME
+          value: "jira.streaming-platform.com"
+        - name: X_PROXY_PORT
+          value: "443"
+        - name: X_PROXY_SCHEME
+          value: "https"
+        - name: X_PATH
+          value: ""
+
+        ports:
+        - name: http
+          containerPort: 8080
+
+        livenessProbe:
+          httpGet:
+            path: /rest/applinks/latest/manifest
+            port: 8080
+          initialDelaySeconds: 180
+          timeoutSeconds: 15
+
+        readinessProbe:
+          httpGet:
+            path: /rest/applinks/latest/manifest
+            port: 8080
+          initialDelaySeconds: 15
+          timeoutSeconds: 1
+
+        volumeMounts:
+
+          - mountPath: /var/www/html
+            name: empty
+
+          - mountPath: /var/atlassian/application-data/confluence
+            name: atlassian-jira-persistent-storage
+      
+      volumes:
+
+        - name: empty
+          emptyDir: {}
+
+        - name: atlassian-jira-persistent-storage
+          persistentVolumeClaim:
+            claimName: atlassian-jira-persistent-storage
+      
