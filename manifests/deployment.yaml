@@ -59,7 +59,7 @@ spec:
 
         volumeMounts:
 
-          - mountPath: /var/atlassian/application-data/confluence
+          - mountPath: /var/atlassian/application-data/jira
             name: atlassian-jira-persistent-storage
       
       volumes:
